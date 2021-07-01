@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.math.BigDecimal.valueOf;
+import static java.math.RoundingMode.HALF_UP;
+
 public class Order {
     private BigDecimal total = new BigDecimal("0.00");
     private String currency = "EUR";
@@ -64,11 +67,11 @@ public class Order {
         status = OrderStatus.REJECTED;
     }
 
-    public void orderItem(Product product, int quantity, BigDecimal taxAmount, BigDecimal taxedAmount) {
-        final OrderItem orderItem = OrderItem.create(product, quantity, taxAmount, taxedAmount);
+    public void orderItem(Product product, int quantity) {
+        final OrderItem orderItem = OrderItem.create(product, quantity);
         items.add(orderItem);
 
-        total = total.add(taxedAmount);
-        tax = tax.add(taxAmount);
+        total = total.add(orderItem.priceWithTax());
+        tax = tax.add(orderItem.getTax());
     }
 }

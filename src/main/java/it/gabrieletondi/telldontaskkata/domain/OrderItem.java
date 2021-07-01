@@ -2,18 +2,16 @@ package it.gabrieletondi.telldontaskkata.domain;
 
 import java.math.BigDecimal;
 
+import static java.math.RoundingMode.HALF_UP;
+
 public class OrderItem {
     private Product product;
     private int quantity;
-    private BigDecimal taxedAmount;
-    private BigDecimal tax;
 
-    public static OrderItem create(Product product, int quantity, BigDecimal taxAmount, BigDecimal taxedAmount) {
+    public static OrderItem create(Product product, int quantity) {
         OrderItem orderItem = new OrderItem();
         orderItem.setProduct(product);
         orderItem.setQuantity(quantity);
-        orderItem.setTax(taxAmount);
-        orderItem.setTaxedAmount(taxedAmount);
         return orderItem;
     }
 
@@ -32,20 +30,16 @@ public class OrderItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-    public BigDecimal getTaxedAmount() {
-        return taxedAmount;
-    }
-
-    public void setTaxedAmount(BigDecimal taxedAmount) {
-        this.taxedAmount = taxedAmount;
-    }
-
+    
     public BigDecimal getTax() {
-        return tax;
+        return product
+                .tax()
+                .multiply(BigDecimal.valueOf(quantity));
     }
 
-    public void setTax(BigDecimal tax) {
-        this.tax = tax;
+    public BigDecimal priceWithTax() {
+        return product.priceWithTax()
+                .multiply(BigDecimal.valueOf(quantity))
+                .setScale(2, HALF_UP);
     }
 }
