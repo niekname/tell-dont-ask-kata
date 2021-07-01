@@ -8,9 +8,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.math.BigDecimal.valueOf;
-import static java.math.RoundingMode.HALF_UP;
-
 public class Order {
     private BigDecimal total = new BigDecimal("0.00");
     private String currency = "EUR";
